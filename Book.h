@@ -1,3 +1,4 @@
+#include <string.h>
 class Book
 {
 private:
@@ -10,4 +11,5 @@ public:
 	void createNewParagraph(string paragraph);
 	void createNewImage(string image);
 	void createNewTable(string table);
+	void print();
 };
