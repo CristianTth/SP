@@ -6,9 +6,9 @@ class Book
 {
 private:
     std::string title;
-    std::vector<std::string> paragraphs;
-    std::vector<std::string> images;
-    std::vector<std::string> tables;
+    std::vector<std::string> paragraphList;
+    std::vector<std::string> imageList;
+    std::vector<std::string> tableList;
 public:
     Book(std::string title);
     void createNewParagraph(std::string paragraph);
