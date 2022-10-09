@@ -1,1 +1,2 @@
-# SP-Lab1
+# SP Project
+# Configuration for Visual Studio Code
