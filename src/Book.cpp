@@ -18,9 +18,9 @@ void Book::print()
     for (Chapter chapter: chapterList)
         chapter.print();
 }
-Chapter Book::getChapter(int index)
+Chapter* Book::getChapter(int index)
 {
-    return chapterList.at(index);
+    return &chapterList.at(index);
 }
 
 
@@ -44,9 +44,9 @@ void Chapter::print()
     for (SubChapter subChapter: subChapterList)
         subChapter.print();
 }
-SubChapter Chapter::getSubChapter(int index)
+SubChapter* Chapter::getSubChapter(int index)
 {
-    return subChapterList.at(index);
+    return &subChapterList.at(index);
 }
 
 
@@ -54,30 +54,31 @@ SubChapter::SubChapter(std::string name)
 {
     this->name = name;
 }
+SubChapter::~SubChapter()
+{
+    for(Element *element: elementList)
+        delete element;
+}
 int SubChapter::createNewImage(std::string imageName)
 {
-    imageList.push_back(Image(imageName));
-    return imageList.size() - 1;
+    elementList.push_back(static_cast<Element*>(new Image(imageName)));
+    return elementList.size() - 1;
 }
 int SubChapter::createNewParagraph(std::string paragraphText)
 {
-    paragraphList.push_back(Paragraph(paragraphText));
-    return paragraphList.size() - 1;
+    elementList.push_back(static_cast<Element*>(new Paragraph(paragraphText)));
+    return elementList.size() - 1;
 }
 int SubChapter::createNewTable(std::string tableTitle)
 {
-    tableList.push_back(Table(tableTitle));
-    return tableList.size() - 1;
+    elementList.push_back(static_cast<Element*>(new Table(tableTitle)));
+    return elementList.size() - 1;
 }
 void SubChapter::print()
 {
     std::cout << "SubChapter: " << name << std::endl;
-    for(Paragraph paragraph: paragraphList)
-        paragraph.print();
-    for(Image image: imageList)
-        image.print();
-    for(Table table: tableList)
-        table.print();
+    for(Element *element: elementList)
+        element->print();
 }
 
 

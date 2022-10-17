@@ -4,7 +4,14 @@
 #include <vector>
 #include "../interface/author.h"
 
-class Image
+class Element
+{
+public:
+    virtual void print() = 0;
+};
+
+
+class Image : public Element
 {
 private:
     std::string imageName;
@@ -14,7 +21,7 @@ public:
 };
 
 
-class Paragraph
+class Paragraph : public Element
 {
 private:
     std::string text;
@@ -24,7 +31,7 @@ public:
 };
 
 
-class Table
+class Table : public Element
 {
 private:
     std::string title;
@@ -38,11 +45,10 @@ class SubChapter
 {
 private:
     std::string name;
-    std::vector<Image> imageList;
-    std::vector<Paragraph> paragraphList;
-    std::vector<Table> tableList;
+    std::vector<Element*> elementList;
 public:
     SubChapter(std::string name);
+    ~SubChapter();
     int createNewImage(std::string imageName);
     int createNewParagraph(std::string paragraphText);
     int createNewTable(std::string tableTitle);
@@ -58,7 +64,7 @@ private:
 public:
     Chapter(std::string name);
     int createSubChapter(std::string subChapterName);
-    SubChapter getSubChapter(int index);
+    SubChapter* getSubChapter(int index);
     void print();
 };
 
@@ -72,7 +78,7 @@ private:
 public:
     Book(std::string title);
     int createChapter(std::string chapterName);
-    Chapter getChapter(int index);
+    Chapter* getChapter(int index);
     void addAuthor(Author author);
     void print();
 };
