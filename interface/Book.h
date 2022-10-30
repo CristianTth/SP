@@ -8,6 +8,9 @@ class Element
 {
 public:
     virtual void print() = 0;
+    virtual void add() = 0;
+    virtual void remove() = 0;
+    virtual Element* get(int index) = 0;
 };
 
 
@@ -18,6 +21,9 @@ private:
 public:
     Image(std::string imageName);
     void print();
+    void add(Element* element);
+    void remove(Element* element);
+    Element* get(int index);
 };
 
 
@@ -28,6 +34,9 @@ private:
 public:
     Paragraph(std::string text);
     void print();
+    void add(Element* element);
+    void remove(Element* element);
+    Element* get(int index);
 };
 
 
@@ -38,34 +47,36 @@ private:
 public:
     Table(std::string title);
     void print();
+    void add(Element* element);
+    void remove(Element* element);
+    Element* get(int index);
 };
 
 
-class SubChapter
+class TableOfContents : public Element
 {
 private:
-    std::string name;
+    std::string title;
+public:
+    TableOfContents(std::string title);
+    void print();
+    void add(Element* element);
+    void remove(Element* element);
+    Element* get(int index);
+};
+
+
+class Section : public Element
+{
+private:
+    std::string title;
     std::vector<Element*> elementList;
 public:
-    SubChapter(std::string name);
-    ~SubChapter();
-    int createNewImage(std::string imageName);
-    int createNewParagraph(std::string paragraphText);
-    int createNewTable(std::string tableTitle);
+    Section(std::string title);
     void print();
-};
-
-
-class Chapter
-{
-private:
-    std::string name;
-    std::vector<SubChapter> subChapterList;
-public:
-    Chapter(std::string name);
-    int createSubChapter(std::string subChapterName);
-    SubChapter* getSubChapter(int index);
-    void print();
+    void add(Element* element);
+    void remove(Element* element);
+    Element* get(int index);
 };
 
 
@@ -73,12 +84,12 @@ class Book
 {
 private:
     std::string title;
-    std::vector<Chapter> chapterList;
+    std::vector<Section*> sectionList;
     std::vector<Author> authorList;
 public:
     Book(std::string title);
-    int createChapter(std::string chapterName);
-    Chapter* getChapter(int index);
+    void addContent(Section* section);
+    Section* getSection(int index);
     void addAuthor(Author author);
     void print();
 };
