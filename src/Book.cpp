@@ -1,29 +1,18 @@
 #include "../interface/Book.h"
-Book::Book(std::string title)
-{
-    this->title = title;
-}
+
+Book::Book(std::string title) : Section(title){}
 void Book::print()
 {
-    std::cout << "Title: " << title << std::endl;
-    std::cout << "Author(s): ";
-    for(Author author: authorList)
-        author.print();
+    std::cout << "Book: " << title << std::endl;
+    std::cout << "Author(s): " << std::endl;
+    for(Author* author: authorList)
+        author->print();
     std::cout << std::endl;
-    for (Section* section: sectionList)
-        section->print();
+    Section::print();
 }
-void Book::addContent(Section* section)
-{
-    sectionList.push_back(section);
-}
-void Book::addAuthor(Author author)
+void Book::addAuthor(Author* author)
 {
     authorList.push_back(author);
-}
-Section* Book::getSection(int index)
-{
-    return sectionList.at(index);
 }
 
 
@@ -33,6 +22,7 @@ Section::Section(std::string title)
 }
 void Section::print()
 {
+    std::cout << title << std::endl;
     for(Element* element: elementList)
         element->print();
 }
@@ -42,7 +32,7 @@ void Section::add(Element* element)
 }
 void Section::remove(Element* element)
 {
-    std::remove(elementList.begin(), elementList.end(), element);
+    elementList.erase(std::remove(elementList.begin(), elementList.end(), element), elementList.end());
 }
 Element* Section::get(int index)
 {
@@ -58,6 +48,9 @@ void Image::print()
 {
     std::cout << "Image with name: " << imageName << std::endl;
 }
+void Image::add(Element* element){};
+void Image::remove(Element* element){};
+Element* Image::get(int index){return nullptr;};
 
 
 
@@ -69,6 +62,9 @@ void Paragraph::print()
 {
     std::cout << "Paragraph: " << text << std::endl;
 }
+void Paragraph::add(Element* element){};
+void Paragraph::remove(Element* element){};
+Element* Paragraph::get(int index){return nullptr;};
 
 
 
@@ -80,6 +76,9 @@ void Table::print()
 {
     std::cout << "Table with Title: " << title << std::endl;
 }
+void Table::add(Element* element){};
+void Table::remove(Element* element){};
+Element* Table::get(int index){return nullptr;};
 
 
 TableOfContents::TableOfContents(std::string title)
@@ -90,3 +89,6 @@ void TableOfContents::print()
 {
     std::cout << "TableOfContents with Title: " << title << std::endl;
 }
+void TableOfContents::add(Element* element){};
+void TableOfContents::remove(Element* element){};
+Element* TableOfContents::get(int index){return nullptr;};
