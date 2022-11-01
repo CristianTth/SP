@@ -1,5 +1,21 @@
 #include "../interface/Book.h"
 
+std::string genRandomString(const int len) {
+    static const char alphanum[] =
+        "0123456789"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "abcdefghijklmnopqrstuvwxyz";
+    std::string tmp_s;
+    tmp_s.reserve(len);
+
+    for (int i = 0; i < len; ++i) {
+        tmp_s += alphanum[rand() % (sizeof(alphanum) - 1)];
+    }
+
+    return tmp_s;
+}
+
+
 Book::Book(std::string title) : Section(title){}
 void Book::print()
 {
@@ -40,18 +56,58 @@ Element* Section::get(int index)
 }
 
 
-Image::Image(std::string imageName)
+Image::Image(std::string url)
 {
-    this->imageName = imageName;
+    this->url = url;
+    imageContent = genRandomString(20);
+    Sleep(5000);
 }
-void Image::print()
+std::string Image::getUrl(){return url;}
+int Image::getDimension(){return imageContent.length();}
+std::string Image::getPictureContent()
 {
-    std::cout << "Image with name: " << imageName << std::endl;
+    return imageContent;
 }
-void Image::add(Element* element){};
-void Image::remove(Element* element){};
-Element* Image::get(int index){return nullptr;};
+void Image::print(){}
+void Image::add(Element* element){}
+void Image::remove(Element* element){}
+Element* Image::get(int index){return nullptr;}
 
+
+ImageProxy::ImageProxy(std::string url)
+{
+    this->url = url;
+    realImage = nullptr;
+}
+ImageProxy::~ImageProxy()
+{
+    delete[] realImage;
+}
+Image ImageProxy::loadImage()
+{
+    if(realImage == nullptr)
+    {
+        realImage = new Image(url);
+        dimension = realImage->getDimension();
+    }
+    return *realImage;
+}
+std::string ImageProxy::getUrl()
+{
+    return url;
+}
+int ImageProxy::getDimension()
+{
+    return dimension;
+}
+std::string ImageProxy::getPictureContent(){return loadImage().getPictureContent();}
+void ImageProxy::print()
+{
+    std::cout << getPictureContent() << std::endl;
+}
+void ImageProxy::add(Element* element){}
+void ImageProxy::remove(Element* element){}
+Element* ImageProxy::get(int index){return nullptr;}
 
 
 Paragraph::Paragraph(std::string text)
@@ -62,9 +118,9 @@ void Paragraph::print()
 {
     std::cout << "Paragraph: " << text << std::endl;
 }
-void Paragraph::add(Element* element){};
-void Paragraph::remove(Element* element){};
-Element* Paragraph::get(int index){return nullptr;};
+void Paragraph::add(Element* element){}
+void Paragraph::remove(Element* element){}
+Element* Paragraph::get(int index){return nullptr;}
 
 
 
@@ -76,9 +132,9 @@ void Table::print()
 {
     std::cout << "Table with Title: " << title << std::endl;
 }
-void Table::add(Element* element){};
-void Table::remove(Element* element){};
-Element* Table::get(int index){return nullptr;};
+void Table::add(Element* element){}
+void Table::remove(Element* element){}
+Element* Table::get(int index){return nullptr;}
 
 
 TableOfContents::TableOfContents(std::string title)
@@ -89,6 +145,6 @@ void TableOfContents::print()
 {
     std::cout << "TableOfContents with Title: " << title << std::endl;
 }
-void TableOfContents::add(Element* element){};
-void TableOfContents::remove(Element* element){};
-Element* TableOfContents::get(int index){return nullptr;};
+void TableOfContents::add(Element* element){}
+void TableOfContents::remove(Element* element){}
+Element* TableOfContents::get(int index){return nullptr;}

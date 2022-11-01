@@ -3,7 +3,19 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <chrono>
+#include <ctime>
+
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
+
 #include "../interface/author.h"
+
+std::string genRandomString(const int len);
+
 
 class Element
 {
@@ -15,12 +27,27 @@ public:
 };
 
 
-class Image : public Element
+class Picture
+{
+public:
+    virtual std::string getUrl() = 0;
+    virtual int getDimension() = 0;
+    virtual std::string getPictureContent() = 0;
+};
+
+
+class Image: public Element, public Picture
 {
 private:
-    std::string imageName;
+    std::string url;
+    std::string imageContent;
 public:
-    Image(std::string imageName);
+    Image(std::string url);
+
+    std::string getUrl();
+    int getDimension();
+    std::string getPictureContent();
+
     void print();
     void add(Element* element);
     void remove(Element* element);
@@ -28,12 +55,35 @@ public:
 };
 
 
-class Paragraph : public Element
+class ImageProxy: public Element, public Picture
+{
+private:
+    Image *realImage;
+    std::string url;
+    int dimension;
+public:
+    ImageProxy(std::string url);
+    ~ImageProxy();
+    Image loadImage();
+
+    std::string getUrl();
+    int getDimension();
+    std::string getPictureContent();
+
+    void print();
+    void add(Element* element);
+    void remove(Element* element);
+    Element* get(int index);
+};
+
+
+class Paragraph: public Element
 {
 private:
     std::string text;
 public:
     Paragraph(std::string text);
+
     void print();
     void add(Element* element);
     void remove(Element* element);
@@ -41,12 +91,13 @@ public:
 };
 
 
-class Table : public Element
+class Table: public Element
 {
 private:
     std::string title;
 public:
     Table(std::string title);
+
     void print();
     void add(Element* element);
     void remove(Element* element);
@@ -54,12 +105,13 @@ public:
 };
 
 
-class TableOfContents : public Element
+class TableOfContents: public Element
 {
 private:
     std::string title;
 public:
     TableOfContents(std::string title);
+
     void print();
     void add(Element* element);
     void remove(Element* element);
@@ -67,7 +119,7 @@ public:
 };
 
 
-class Section : public Element
+class Section: public Element
 {
 private:
     std::vector<Element*> elementList;
@@ -75,6 +127,7 @@ protected:
     std::string title;
 public:
     Section(std::string title);
+
     void print();
     void add(Element* element);
     void remove(Element* element);
@@ -82,12 +135,13 @@ public:
 };
 
 
-class Book : public Section
+class Book: public Section
 {
 private:
     std::vector<Author*> authorList;
 public:
     explicit Book(std::string title);
+
     void addAuthor(Author* author);
     void print();
 };
