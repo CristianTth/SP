@@ -110,13 +110,39 @@ void ImageProxy::remove(Element* element){}
 Element* ImageProxy::get(int index){return nullptr;}
 
 
+AlignLeft::AlignLeft(int left)
+{
+    this->left = left;
+}
+void AlignLeft::render(std::string text)
+{
+    std::istringstream stream(text);
+    std::string line;
+    while (std::getline(stream, line))
+    {
+        for(int i = 0; i < left; i++)
+            std::cout << " ";
+        std::cout << line << std::endl;
+    }
+}
+
+
 Paragraph::Paragraph(std::string text)
 {
     this->text = text;
+    alignStrategy = nullptr;
+}
+void Paragraph::setAlignStrategy(AlignStrategy *alignStrategy)
+{
+    this->alignStrategy = alignStrategy;
 }
 void Paragraph::print()
 {
-    std::cout << "Paragraph: " << text << std::endl;
+    std::cout << "Paragraph: " << std::endl;
+    if(alignStrategy != nullptr)
+        alignStrategy->render(text);
+    else
+        std::cout << text << std::endl;
 }
 void Paragraph::add(Element* element){}
 void Paragraph::remove(Element* element){}

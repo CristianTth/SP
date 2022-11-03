@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <chrono>
 #include <ctime>
+#include <sstream>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -77,17 +78,48 @@ public:
 };
 
 
+class AlignStrategy
+{
+public:
+    virtual void render(std::string text) = 0;
+};
+
+
+class AlignLeft: public AlignStrategy
+{
+private:
+    int left;
+public:
+    AlignLeft(int left);
+    void render(std::string text);
+};
+
+
+// class AlignRight: public AlignStrategy
+// {
+// private:
+//     int right;
+// public:
+//     AlignRight(int right);
+//     void render(std::string text);
+// };
+
+
 class Paragraph: public Element
 {
 private:
     std::string text;
+    AlignStrategy *alignStrategy;
 public:
     Paragraph(std::string text);
+    void setAlignStrategy(AlignStrategy *alignStrategy);
 
     void print();
     void add(Element* element);
     void remove(Element* element);
     Element* get(int index);
+
+    friend class AlignStrategy;
 };
 
 
