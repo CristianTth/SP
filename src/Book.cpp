@@ -127,6 +127,46 @@ void AlignLeft::render(std::string text)
 }
 
 
+AlignRight::AlignRight(int right)
+{
+    this->right = right;
+}
+void AlignRight::render(std::string text)
+{
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    int columns;
+
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+    std::istringstream stream(text);
+    std::string line;
+    while (std::getline(stream, line))
+    {
+        for(int i = 0; i < columns - right - line.size(); i++)
+            std::cout << " ";
+        std::cout << line << std::endl;
+    }
+}
+
+AlignCenter::AlignCenter(){}
+void AlignCenter::render(std::string text)
+{
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    int columns;
+
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+    std::istringstream stream(text);
+    std::string line;
+    while (std::getline(stream, line))
+    {
+        for(int i = 0; i < (columns - line.size())/2; i++)
+            std::cout << " ";
+        std::cout << line << std::endl;
+    }
+}
+
+
 Paragraph::Paragraph(std::string text)
 {
     this->text = text;

@@ -95,14 +95,22 @@ public:
 };
 
 
-// class AlignRight: public AlignStrategy
-// {
-// private:
-//     int right;
-// public:
-//     AlignRight(int right);
-//     void render(std::string text);
-// };
+class AlignRight: public AlignStrategy
+{
+private:
+    int right;
+public:
+    AlignRight(int right);
+    void render(std::string text);
+};
+
+
+class AlignCenter: public AlignStrategy
+{
+public:
+    AlignCenter();
+    void render(std::string text);
+};
 
 
 class Paragraph: public Element
