@@ -14,7 +14,7 @@ int main()
     std::cout << "Printing without Alignment" << std::endl;
     cap1->print();
     p1->setAlignStrategy(new AlignCenter());
-    p2->setAlignStrategy(new AlignRight(4));
+    p2->setAlignStrategy(new AlignRight(2));
     p3->setAlignStrategy(new AlignLeft(4));
 
     std::cout << "Printing without Alignment" << std::endl;
