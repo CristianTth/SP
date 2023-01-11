@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../interface/VisitContentVisitor.h"
+#include "../interface/Customer.h"
 
 int main()
 {
@@ -19,4 +20,18 @@ int main()
     VisitContentVisitor *stats = new VisitContentVisitor();
     cap1->accept(stats);
     stats->print();
+
+    Book book1("Pinocchio");
+
+    Customer customer1("Alice");
+    Customer customer2("Bob");
+    book1.Attach(&customer1);
+    book1.Attach(&customer2);
+
+    book1.SetAvailability("limited");
+    book1.SetAvailability("out of stock");
+
+    book1.Detach(&customer1);
+
+    book1.SetAvailability("available");
 }
